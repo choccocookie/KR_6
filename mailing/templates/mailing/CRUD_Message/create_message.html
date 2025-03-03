@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<h1> Создание сообщения </h1>
+
+
+<form method="POST">
+    {% csrf_token %}
+    <p> Введите тему сообщенияl</p>
+    <input type="text" id="topic" name="topic">
+    <p> Введите тело сообщения</p>
+    <input type="text" id="content" name="content">
+
+
+    <input type="submit" value="Создать сообщение" >
+
+</form>
+<h1 style="color: red;"> {{ error }}</h1>
+{% endblock %}

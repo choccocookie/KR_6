@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ up_form.as_p}}
+<!--    <p>Введите Email</p>-->
+<!--    <input type="text" name="email" value="{{client.email}}">-->
+<!--    <p>Введите Ф.И.О</p>-->
+<!--    <input type="text" name="fullname" value="{{client.fullname}}">-->
+<!--    <p>Введите комментарий</p>-->
+<!--    <input type="text" name="comment" value="{{client.comment}}">-->
+
+    <input type="submit" value="Сохранить изменения">
+</form>
+<a href="{% url 'read_client' %}">Назад</a>
+{% endblock %}

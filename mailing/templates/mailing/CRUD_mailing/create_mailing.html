@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<h1> Создание рассылки </h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+<!--    <p> Дата отправки </p>-->
+<!--    <input type="text" id="email" name="data_sanding">-->
+
+<!--    <p> Введите интервал отправки</p>-->
+
+<!--    <select name="intervals">-->
+<!--                <option value="DAILY"> Раз в день </option>-->
+<!--                <option value="WEEKLY"> Раз в неделю </option>-->
+<!--                <option value="MONTHLY"> Раз в месяц </option>-->
+<!--    </select>-->
+
+<!--     <p> Сообщения</p>-->
+<!--    <select name="message">-->
+<!--        {% for message in messages %}-->
+<!--            <option value="{{message.id }}">{{message.topic}}</option>-->
+<!--        {% endfor %}-->
+
+<!--    </select>-->
+
+<!--    <p> Клиенты</p>-->
+<!--    {% for client in clients %}-->
+
+<!--    <div>-->
+<!--        <hr color="red"/>-->
+<!--        <input type="checkbox" id="client_{{client_id}}" name="clients", value="{{client.id}}">-->
+<!--        <label for="client_{{client_id}}"> {{client.fullname}}</label>-->
+<!--    </div>-->
+<!--    {% endfor %}-->
+
+
+    <input type="submit" value="Создать рассылку" >
+
+<!--     <p> Статус рассылки</p>-->
+
+<!--    <select name="status">-->
+<!--                <option value="CREATED"> Создана </option>-->
+<!--                <option value="STARTED"> Запущена </option>-->
+<!--                <option value="COMPLITED"> Завершена </option>-->
+<!--             -->
+<!--    </select>-->
+
+
+</form>
+{% endblock %}

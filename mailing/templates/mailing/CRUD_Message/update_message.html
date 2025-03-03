@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    <p>Введите Тему сообщения</p>
+    <input type="text" name="topic" value ="{{message.topic}}">
+    <p>Введите Сообщение</p>
+    <input type="text" name="content" value="{{message.content}}">
+
+
+    <input type="submit" value="Сохранить изменения">
+</form>
+<a href="{% url 'mailing:read_message' %}">Назад</a>
+{% endblock %}

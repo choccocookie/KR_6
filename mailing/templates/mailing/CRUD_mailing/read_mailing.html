@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1>Мои рассылки</h1>
+    <p>{{ message }}</p>
+{% for mailing in mailings %}
+    <hr color="red"/>
+    <p> {{mailing.id}}</p>
+    <p> Дата отправки рассылки </p>
+    <p>{{mailing.first_sanding_data}}</p>
+
+    <p> Интервал отправки рассылки </p>
+    <p>{{mailing.intervals}}</p>
+
+    <p> Статус рассылки </p>
+    <p>{{mailing.status}}</p>
+
+    <p> Сообщение </p>
+    <p>{{mailing.message.topic}}:{{mailing.message.content}}</p>
+
+    <p> Клиенты </p>
+    {% for client in mailing.clients.all %}
+    <p> {{client.fullname}}</p>
+
+    {% endfor %}
+    <a href="{% url 'mailing:update_mailing' mailing.id %}">Редактировать</a>
+
+{% endfor %}
+
+
+    </ul>
+
+{% endblock %}

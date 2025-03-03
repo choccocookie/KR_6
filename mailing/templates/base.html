@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои клиенты</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+<nav class="navbar">
+
+    {% if not user.is_authenticated %}
+
+        <li><a href="{% url 'sing_up' %}">Войти</a>/<a href="{% url 'register' %}">Зарегистрироваться</a></li>
+
+    {% else %}
+        {% if not user.is_manager %}
+            <ul>
+                <li><a href="{% url 'mailing:read_client' %}">Посмотреть моих клиентов</a></li>
+                <li><a href="{% url 'mailing:create_clients' %}">Создать клиента</a></li>
+                <li><a href="{% url 'mailing:read_mailing' %}">Посмотреть мои рассылки</a></li>
+                <li><a href="{% url 'mailing:create_mailing' %}">Создать рассылку</a></li>
+                <li><a href="{% url 'mailing:read_message' %}">Посмотреть мои сообщения</a></li>
+                <li><a href="{% url 'mailing:create_message' %}">Создать сообщение</a></li>
+
+            </ul>
+            {% else %}
+                    <ul>
+                        <li><a href="{% url 'view_users' %}">Посмотреть список пользователей</a></li>
+                        <li><a href="{% url 'view_mailings' %}">Посмотреть рассылки</a></li>
+                    </ul>
+        {% endif %}
+
+        <li><a href="{% url 'logout' %}">Выход</a></li>
+
+
+    {% endif %}
+</nav>
+
+{% block register %}
+
+{% endblock %}
+{%if user.is_authenticated %}
+{% block content %}
+
+
+
+
+
+{% endblock %}
+{% else %}
+<p> Пожалуйста, зарегистрируйтесь или войдите</p>
+{% endif %}
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load cache %}
+{% block content %}
+
+{% cache  600 count_mailing count_active_mailing unique_client %}
+<p> Количество рассылок: {{count_mailing}}</p>
+<p> Количество активных рассылок: {{count_active_mailing}}</p>
+<p> Количество уникальных клиентов: {{unique_client}}</p>
+{% endcache %}
+<h2>Блог</h2>
+{% for blog_post in random_blog_post %}
+
+    <hr color="green">
+    <p> {{blog_post.tittle}}</p>
+    <p> {{blog_post.content}}</p>
+
+{% endfor %}
+
+
+{% endblock %}

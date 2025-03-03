@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% extends 'base.html' %}
+
+{% block register %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.username}}
+    <br>
+    {{form.password1}}
+    <input type="submit" value="Войти">
+</form>
+
+{% endblock %}
+</body>
+</html>

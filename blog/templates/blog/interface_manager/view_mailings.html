@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h1>Рассылки</h1>
+{% for mailing in mailings %}
+
+    <hr color="green">
+    <p>Автор</p>
+    <p>{{mailing.AUTHOR.username}}</p>
+
+    <p>Дата отправки рассылки</p>
+    <p>{{mailing.first_sanding_data}}</p>
+
+    <p>Интервал отправки/p>
+    <p>{{mailing.intervals}}</p>
+
+    <p>Статус</p>
+    <p>{{mailing.status}}</p>
+
+    <p>Сообщение</p>
+    <p>{{mailing.message.topic }}: {{maling.message.content}}</p>
+
+    <p>Клиенты</p>
+    {% for client in maling.clients.all %}
+    <hr color="blue">
+        <p>{{client.full_name}}</p>
+    {% endfor %}
+    {% if mailing.status != 'COMPLETED' %}
+    <form method="POST" action="{% url 'close' mailing.id %}">
+        {% csrf_token %}
+        <button type="submit">Отключить</button>
+
+    </form>
+    {% endif %}
+
+
+<hr color="red">
+{% endfor %}
+
+{% endblock %}

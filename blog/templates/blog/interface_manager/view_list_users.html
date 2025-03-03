@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for user in users %}
+<hr color="green"
+        {% if user.is_active %}
+            <p>Имя: {{ user.username }}</p>
+            <p>email: {{ user.email }}</p>
+            <form action="{% url 'ban' user.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Забанить</button>
+
+            </form>
+        {% else %}
+            <h2>Заблокирован</h2>
+            <p>Имя: {{ user.username }}</p>
+            <p>email: {{ user.email }}</p>
+            <form action="{% url 'on_ban' user.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Разбанить</button>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}

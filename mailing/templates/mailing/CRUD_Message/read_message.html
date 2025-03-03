@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1>Мы сделали первый шаблон джанго</h1>
+    <p>{{ about }}</p>
+    <h1> Сообщения </h1>
+    <ul>
+        {% for message in message %}
+            <p>Id сообщения:{{ message.id }}</p>
+            <p>Тема сообщения:{{ message.topic }}</p>
+            <p>Тело сообщения:{{ message.content }}</p>
+            <a href="{% url 'mailing:update_message' message.id %}"> Редактировать сообщение</a>
+            <a href="#"> Удалить сообщение</a>
+
+        {% endfor %}
+    </ul>
+
+{% endblock %}
