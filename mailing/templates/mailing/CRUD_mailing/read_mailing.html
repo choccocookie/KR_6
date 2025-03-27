@@ -25,8 +25,16 @@
 
     {% endfor %}
     <a href="{% url 'mailing:update_mailing' mailing.id %}">Редактировать</a>
+    <a href="{% url 'mailing:delete_mailing' mailing.id %}"> Удалить рассылочку</a>
 
 {% endfor %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 
 
     </ul>

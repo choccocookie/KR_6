@@ -25,11 +25,12 @@ import debug_toolbar
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('mailing/', include('mailing.urls')),
+    path('users/', include('users.urls')),
     path('', include('blog.urls')),
     path('__debug__/', include(debug_toolbar.urls))
 ]
 
 
-
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

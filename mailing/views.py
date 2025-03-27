@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from pyexpat.errors import messages
+from django.contrib import messages
+from .forms import Client, ClientForm, Message, MessageForm, Mailing, MailingForm
+from .models import Attempt
 
-from .models import Client, Message, Mailing
-from .forms import *
 
 
-# Create your views here.
 def index(request):
-    client = Client.objects.all() # - возврашщает список всех записей, .get
+    client = Client.objects.all()
     print(client)
     context = {'message': 'Это домашняя страница'}
 
@@ -15,11 +15,12 @@ def index(request):
 
 
 def read_clients(request):
-    client = Client.objects.all() # - возврашщает список всех записей, .get
+    client = Client.objects.all()
     print(client)
     context = {'message': 'Мы передали наш первый контекст в шаблон',
                'client': client}
     return render(request, 'mailing/CRUD_Clients/read_client.html', context)
+
 
 def create_client(request):
     if request.method == 'GET':
@@ -33,36 +34,19 @@ def create_client(request):
             new_client.author = request.user
             new_client.save()
 
-
             return redirect('mailing:create_clients')
         else:
             return render(request, 'mailing/CRUD_Clients/create_client.html', {'error': 'Попробуйте еще раз'})
 
 
-
-    #     email = request.POST.get('email')
-    #     fullname = request.POST.get('fullname')
-    #     comment = request.POST.get('comment')
-    #
-    #     if email and fullname:
-    #         if comment:
-    #             new_client = Client.objects.create(email=email, fullname=fullname, comment=comment)
-    #         else:
-    #             new_client = Client.objects.create(email=email, fullname=fullname, comment='Нет коментариев')
-    #         new_client.save()
-    #         return redirect('create_client')
-    #     else:
-    #         return render(request, 'mailing/CRUD_Clients/create_client.html',  {'error': 'Не правильный ввод'})
-    #
-    #     print(email, fullname, comment)
-    # return render(request, 'mailing/CRUD_Clients/create_client.html')
-
 def read_message(request):
-    message = Message.objects.all() # - возврашщает список всех записей, .get
+
+    message = Message.objects.filter(author=request.user.id)
     print(message)
     context = {'about': 'Мы передали контекст из read_message в шаблон read_message.html',
                'message': message}
     return render(request, 'mailing/CRUD_Message/read_message.html', context)
+
 
 def create_message(request):
     form = MessageForm()
@@ -83,38 +67,10 @@ def create_message(request):
         return redirect('mailing:create_message')
 
 
-
-
-
-# def update_client(request, id_client):
-#     get_client = Client.objects.get(id=id_client)
-#     if request.method == 'GET':
-#
-#         context = {
-#             'client': get_client,
-#         'error': 'Неправильный ввод'}
-#         return render(request, 'mailing/CRUD_Clients/update_client.html', context)
-#     else:
-#         email = request.POST.get('email')
-#         fullname = request.POST.get('fullname')
-#         comment = request.POST.get('comment')
-#
-#         if email and fullname:
-#             get_client.email = email
-#             get_client.fullname = fullname
-#             get_client.comment = comment if comment else "Нет комментария"
-#             get_client.save()
-#             return redirect('update_client', id_client=id_client)
-#
-#
-#         else:
-#             return render(request, 'mailing/CRUD_Clients/update_client.html', {'error': 'Не правильный ввод'})
-
 def update_client(request, id_client):
     get_client = Client.objects.get(id=id_client)
     form = ClientForm(instance=get_client)
     if request.method == "GET":
-
 
         context = {
             "client": get_client,
@@ -126,20 +82,6 @@ def update_client(request, id_client):
         if up_form.is_valid():
             up_form.save()
             return redirect('mailing:update_client', id_client)
-        # email = request.POST.get('email')
-        # fullname = request.POST.get('fullname')
-        # comment = request.POST.get('comment')
-        #
-        # if email and fullname:
-        #     get_client.email = email
-        #     get_client.fullname = fullname
-        #     get_client.comment = comment if comment else "Нет комментария"
-        #
-        #     get_client.save()
-        #     return redirect('update_client', id_client=id_client)
-        # else:
-        #     return render(request, 'mailing/CRUD_Clients/update_client.html',
-        #                   {'error': 'Неправильно введено имя и email',  "client": get_client})
 
 
 def update_message(request, id_message):
@@ -154,17 +96,16 @@ def update_message(request, id_message):
         topic = request.POST.get('topic')
         content = request.POST.get('content')
 
-
         if topic and content:
             get_message.topic = topic
             get_message.content = content
-
 
             get_message.save()
             return redirect('update_message', id_message=id_message)
         else:
             return render(request, 'mailing/CRUD_Message/update_message.html',
                           {'error': 'Все поля должны быть заполнены', "message": get_message})
+
 
 def create_mailing(request):
 
@@ -174,9 +115,8 @@ def create_mailing(request):
         "form": form
     }
 
-
     if request.method == 'GET':
-        return render(request,'mailing/CRUD_mailing/create_mailing.html', context)
+        return render(request, 'mailing/CRUD_mailing/create_mailing.html', context)
 
     else:
         form = MailingForm(request.POST)
@@ -186,6 +126,7 @@ def create_mailing(request):
             mailing.save()
             mailing.clients.set(request.POST.getlist('clients'))
         return redirect('mailing:create_mailing')
+
 
 def read_mailing(request):
     get_mailings = Mailing.objects.filter(AUTHOR=request.user.id)
@@ -209,27 +150,31 @@ def update_mailing(request, id_mailing):
         form = MailingForm(request.POST, instance=get_mailing)
         if form.is_valid():
             form.save()
-            return redirect('update_mailing', id_mailing=id_mailing)
-        # first_sanding_data = request.POST.get('data_sanding')
-        # intervals = request.POST.get('intervals')
-        # message_id = request.POST.get('message')
-        # clients = request.POST.getlist('clients')
-        # status = request.POST.get('status')
-        #
-        # mailing = Mailing.objects.create(
-        #     first_sanding_data=first_sanding_data,
-        #     intervals=intervals,
-        #     message=Message.objects.get(id=int(message_id)),
-        #     status=status
-        #
-        # )
-        # mailing.clients.set(clients)
-        # mailing.save()
-        # return redirect('update_mailing')
+            return redirect('mailing:update_mailing', id_mailing=id_mailing)
+
 
 def delete_client(request, id_client):
     get_client = Client.objects.get(id=id_client)
     get_client.delete()
+    messages.success(request, "Клиент успешно удален.")
     return redirect('mailing:read_client')
 
 
+def delete_message(request, id_message):
+    message = Message.objects.get(id=id_message)
+    message.delete()
+    messages.success(request, "Сообщение успешно удалено.")
+    return redirect('mailing:read_message')
+
+
+def delete_mailing(request, id_mailing):
+    mailing = Mailing.objects.get(id=id_mailing)
+    mailing.delete()
+    messages.success(request, "Рассылочка успешно удалена.")
+    return redirect('mailing:read_mailing')
+
+
+def attempt_list(request):
+    attempts = Attempt.objects.all()
+    print(attempts)
+    return render(request, 'mailing/attempt_list.html', {'attempts': attempts})

@@ -15,5 +15,11 @@
             <a href="{% url 'mailing:delete_client' client.id %}"> Удалить клиента</a>
         {% endfor %}
     </ul>
-
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 {% endblock %}

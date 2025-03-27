@@ -1,4 +1,3 @@
-
 from .models import Mailing, Attempt
 from django.core.mail import send_mail
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -7,12 +6,10 @@ from django.utils import timezone
 from datetime import timedelta
 
 
-
-
-
 def send_emails():
     now = timezone.now()
-    mailings = Mailing.objects.filter(status='CREATED', first_sanding_data__lte=now)
+    mailings = Mailing.objects.filter(
+        status='CREATED', first_sanding_data__lte=now)
 
     for mailing in mailings:
         mailing.status = 'STARTED'
@@ -40,13 +37,15 @@ def send_emails():
                 fail_silently=False
             )
 
-            Attempt.objects.create(mailing=mailing, status='SUCCESS', last_sanding_data=now, server_answer=f"Рассылка успешно отправлена :)")
-            mailings.status = 'COMPLETED'
+            Attempt.objects.create(mailing=mailing, status='SUCCESS',
+                                   last_sanding_data=now, server_answer=f"Рассылка успешно отправлена :)")
+
             mailing.save()
             print(f"Рассылка {mailing.id} успешно отправлена :)")
         except Exception as e:
             # В случае ошибки фиксируем неудачную попытку с указанием причины
-            Attempt.objects.create(mailing=mailing, status='FAILED', last_sanding_data=now, server_answer=f"Рассылка не отправлена :(")
+            Attempt.objects.create(mailing=mailing, status='FAILED',
+                                   last_sanding_data=now, server_answer=f"Рассылка не отправлена :(")
             print(f"Ошибка при отправке рассылки: Некоретно введен email")
 
         else:
@@ -56,6 +55,7 @@ def send_emails():
 
 
 scheduler = BackgroundScheduler()
+
 
 def start_scheduler():
     # Запланируйте выполнение задачи каждую минуту:

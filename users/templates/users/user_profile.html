@@ -1,0 +1,7 @@
+<h2>Профиль</h2>
+
+<p>Email: {{ user.email }}</p>
+<p>Телефон: {{ user.phone_number }}</p>
+<p>Страна: {{ user.country }}</p>
+
+<a href="{% url 'edit_user' %}">Редактировать профиль</a>
